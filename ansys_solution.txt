@@ -1,0 +1,53 @@
+a=9.121037645605352
+b=8.821991925215723
+r=2.542059733851649
+filename='ansys_solution'
+finish
+/FILNAME,filename,0
+/PREP7  
+BLC4,-a/2,-b/2,a,b
+CYL4,0,0,r  
+ASBA,1,2
+ET,1,SHELL181   
+MPTEMP,,,,,,,,  
+MPTEMP,1,0  
+MPDATA,EX,1,,210000 
+MPDATA,PRXY,1,,0.3  
+
+sect,1,shell,,  
+secdata, 0.1,1,0.0,3
+secoffset,MID   
+seccontrol,,,, , , ,
+
+TYPE,   1   
+MAT,       1
+REAL,   
+ESYS,       0   
+SECNUM,   1 
+
+AESIZE,all,0.2,
+MSHAPE,0,2D 
+MSHKEY,0
+amesh,all
+
+DL,4, ,ALL,  
+SFL,2,PRES,10,
+
+/solu
+allsel
+solve
+
+/POST1
+FILE,%filename%,'rst','.'  
+SET,LAST
+PLNSOL, S,EQV, 0,1.0
+allsel
+nsort,s,eqv,0,0,all
+*get,max_stress,sort,0,max
+*cfopen,%filename%,csv,,
+*vwrite,'max_str,',max_stress
+(a10,f20.6)
+*cfclos
+finish
+
+
